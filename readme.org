@@ -3,10 +3,10 @@
 KludgeOMatic2 is an implementation of Margret E. Hamilton's Universal
 Systems Language for the purpose of facilitating her idea of Development Before
 the Fact in order to create reliable systems.
-** TODO Links to documents
+** COMMENT TODO Links to documents
 ** Motivating Example
 The motivating example is buildings as reliable systems.
-*** TODO Reliable Buildings Manifesto
+*** COMMENT TODO Reliable Buildings Manifesto
 ** Obtaining 
 [[https://github.com/brudgers/KludgeOMatic2.git][Get it from the Github Repository]]
 
