@@ -1,0 +1,13 @@
+#lang typed/racket
+
+;; Defines Type for use in Tmaps
+
+(define-type Requirement  Symbol)
+(define-type Production  Symbol)
+
+
+(struct Type ((requirement : (Listof Requirement))
+              (production : (Listof Production)))
+  #:transparent)
+
+(provide (all-defined-out))

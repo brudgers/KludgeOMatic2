@@ -1,0 +1,9 @@
+#lang typed/racket
+
+;; 
+(define-type Requirement  Symbol)
+(define-type Production  Symbol)
+
+
+(struct Type ((requirement : (Listof Requirement))
+              (production : (Listof Production))))
