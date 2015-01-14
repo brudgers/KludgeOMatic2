@@ -1,0 +1,14 @@
+In `#lang typed/racket` as in many Lisps, functions, or more properly: [procedures][http://docs.racket-lang.org/reference/procedures.html?q=proc-t], are first class dataypes.
+
+I was thinking it might be interesting investigate the possibility of adding predicates such as `linear-function?` and `trigonometric-function?` to `typed/racket`. Out of the box, `typed/racket` only defines function types by arity.
+
+     (define-type Calculate-with-one-number (-> Number Number))
+
+While this is helpful, it isn't really mathematically useful. The class of all procedures that take one number and return another number is rather amorphous:
+
+     (lambda(x)(+ (* 2 x) 1))
+
+and
+     (lambda(x)(sin x))
+
+both would get the same type even though there is an occassionally useful difference between linear functions and trigonometric functions. The problem is that airity is one of the less mathematically interesting properties of a function, for the same reason that the difference between a polynomial of degree `n-1` and a polynomial of degree `n` is rarely something that makes or breaks our mathematical insights.

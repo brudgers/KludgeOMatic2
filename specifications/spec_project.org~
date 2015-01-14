@@ -1,0 +1,17 @@
+* The Specs Project
+<2014-12-02>
+Initial work
+** Data Cleanup
+Converting .doc files to .txt in order to parse
+*** Catdoc
+A Linux option to take a .doc file and output text to stdout. Problem is handling hidden fields in the Spexplus files.
+
+*** OfficeLibre
+FOR PDF
+$ soffice --headless --convert-to pdf *.doc
+
+FOR PLAIN TEXT
+$ soffice --headless --convert-to txt:text *.doc
+
+Headless won't run if a graphic session is running.
+ 
