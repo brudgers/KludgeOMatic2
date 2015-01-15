@@ -1,6 +1,9 @@
 #lang typed/racket
 
-(provide OneOf)
+(provide OneOf
+         SetOf
+         TupleOf
+         Type)
 
 ;; Defines Type for use in Tmaps
 
@@ -32,27 +35,19 @@
    : (Relation Type (Listof Type) . -> . Boolean)))
 
 
+;; ---------
+;; Relations
+
 ;; Define the OneOf relationship
 (: oneOf TypeRelation)
-(define (oneOf (parent : Type) children)
+(define (oneOf parent children)
   
   (define requirements : (Listof Requirement) 
     (Type-requirement parent))
   
-    ;; This is a one level flatten
-  (: get-productions ((Listof (Listof Production)) . -> . (Listof Symbol)))
-  (define (get-productions loa)
-    (cond 
-      ((null? loa) null)
-      (else
-       (append (first loa)
-               (get-productions (rest loa))))))
-  
   (define productions : (Listof Production)
     (get-productions (map Type-production children)))
-  
-
-  
+    
   (: requirement-met? (Requirement . -> . Boolean))
   (define (requirement-met? requirement)  
   
@@ -64,11 +59,69 @@
     
     (member? requirement productions))  
   
-  (ormap requirement-met? requirements))
+  (andmap requirement-met? requirements))
 
-;; Instantiate the OneOf relationship
+
+;; Define setOf Relationship
+;; TODO validate no duplicates in requirements and productions
+;; If duplicates are OK in set, then set should be atomic
+;; Need to think about bag versus set.
+(: setOf TypeRelation)
+(define (setOf parent children)
+  (define requirements : (Listof Requirement) 
+    (symbol-sort (Type-requirement parent)))
+  
+  (define productions : (Listof Production)
+    (symbol-sort (get-productions (map Type-production children))))
+  
+  (equal? requirements productions))
+
+;; Define tupleOf Relationship
+(: tupleOf TypeRelation)
+(define (tupleOf parent children)
+  
+  (define requirements : (Listof Requirement) 
+    (Type-requirement parent))
+  
+  (define productions : (Listof Production)
+    (get-productions (map Type-production children)))
+  
+  ;; Order of the Children matters
+  (equal? requirements productions))
+
+
+;; Instantiate relationships
 (define OneOf
   (Relation oneOf))
+
+(define SetOf
+  (Relation setOf))
+
+(define TupleOf
+  (Relation tupleOf))
+
+;; ---------------
+;; Utility Function
+
+;; This is a one level flatten
+(: get-productions ((Listof (Listof Production)) . -> . (Listof Production)))
+(define (get-productions loa)
+  (cond 
+    ((null? loa) null)
+    (else
+     (append (first loa)
+             (get-productions (rest loa))))))
+
+;; Arrange (Listof Symbol) in Lexographic Order
+(: symbol-sort ((Listof Symbol) . -> . (Listof Symbol)))
+(define (symbol-sort los)
+  (: sorter (Symbol Symbol . -> . Boolean)) 
+  (define (sorter x y)
+    (string<? (symbol->string x)
+              (symbol->string y)))
+  (sort los sorter))
+
+
 
 
 
